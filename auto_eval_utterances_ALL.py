@@ -121,6 +121,6 @@ def evaluate_utterances(utterances, csv_name):
 if __name__=="__main__":
 
     df = pd.read_csv("/home/as11919/empathic_conversations/data/only_news_subset_data/cleaned_pairwise_EDOS.csv")
-    response_posts = list(df["response_post"].fillna(""))[:50]
+    response_posts = list(df["response_post"].fillna(""))
     evals = evaluate_utterances(response_posts, "pairwise_scores")
     evals.to_csv("/scratch/as11919/empathic-conversations-chatbot/data/turn_lvl_scores_data/cleaned_pairwise_da_emo_ep_sd_scores.csv")
