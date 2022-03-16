@@ -116,5 +116,8 @@ def evaluate_utterances(utterances, csv_name):
     print(f"saved automatic evaluation of chats to {save_path}")
 
 
+if __name__=="__main__":
 
-    
+    df = pd.read_csv("/home/as11919/empathic_conversations/data/only_news_subset_data/cleaned_pairwise_EDOS.csv")
+    response_posts = list(df["response_post"].fillna(""))[:50]
+    evaluate_utterances(response_posts, "trial_scores_for_pairwise")
