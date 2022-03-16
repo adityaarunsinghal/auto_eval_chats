@@ -66,7 +66,7 @@ def evaluate_utterances(utterances, csv_name):
     PREFIX_PATH = os.path.join(os.path.dirname(__file__), './models')
     
     da_path = f"{PREFIX_PATH}/dialog_acts_roberta_20_epoch" 
-    empathy_path = f"{PREFIX_PATH}/empathy/fully_trained_roberta"
+    empathy_path = f"{PREFIX_PATH}/third_person_empathy"
     emotion_path = f"{PREFIX_PATH}/emotion/run_1"
     emotionalpolarity_path =  f"{PREFIX_PATH}/emotionalpolarity/test1"
     selfdisclosure_path = f"{PREFIX_PATH}/selfdisclosure/run_1"
@@ -83,12 +83,12 @@ def evaluate_utterances(utterances, csv_name):
     print(f"Dialog Act Inference Time: {(time.time() - start):.2f} seconds")
     chats_df['dialog_acts'] = da_labels
 
-    empathy_predictor = RobertaWrapper(empathy_path)
-    print("Computing empathy scores . . . ")
-    start = time.time()
-    emp_labels = empathy_predictor.predict(utt_list)
-    print(f"Empathy Inference Time: {(time.time() - start):.2f} seconds")
-    chats_df['empathy'] = emp_labels
+    # empathy_predictor = RobertaWrapper(empathy_path)
+    # print("Computing empathy scores . . . ")
+    # start = time.time()
+    # emp_labels = empathy_predictor.predict(utt_list)
+    # print(f"Empathy Inference Time: {(time.time() - start):.2f} seconds")
+    # chats_df['empathy'] = emp_labels
 
     emotion_predictor = RobertaWrapper(emotion_path)
     print("Computing emotion scores . . . ")
@@ -115,9 +115,12 @@ def evaluate_utterances(utterances, csv_name):
     chats_df.to_csv(save_path)
     print(f"saved automatic evaluation of chats to {save_path}")
 
+    return chats_df
+
 
 if __name__=="__main__":
 
     df = pd.read_csv("/home/as11919/empathic_conversations/data/only_news_subset_data/cleaned_pairwise_EDOS.csv")
     response_posts = list(df["response_post"].fillna(""))[:50]
-    evaluate_utterances(response_posts, "trial_scores_for_pairwise")
+    evals = evaluate_utterances(response_posts, "pairwise_scores")
+    evals.to_csv("/scratch/as11919/empathic-conversations-chatbot/data/turn_lvl_scores_data/cleaned_pairwise_da_emo_ep_sd_scores.csv")
